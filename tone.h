@@ -2,7 +2,7 @@
 #define TONE_H
 
 
-#include "mbed.h"
+#include <mbed.h>
 
     /** 
      * @brief 音を鳴らすことができます
