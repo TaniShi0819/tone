@@ -1,3 +1,12 @@
+/**
+ * @file AMT_102.hpp
+ * @author 谷 優之心 (yunoshin.tani.0819@gmail.com)
+ * @brief インクリメンタル型エンコーダーの "AMT 102" から値を取得する
+ * @version 1.2
+ * @date 2024-11-11
+ * @copyright Copyright (c) 2024
+ */
+
 #ifndef TONE_H
 #define TONE_H
 
@@ -5,14 +14,12 @@
 #include <mbed.h>
 
     /** 
-     * @brief 音を鳴らすことができます
+     * @brief 音を鳴らす
      * @param PWM_PIN ピン(PWMのみ)
      * @param FREQUENCY 音の周波数(Hz)
      * @param DURATION 音の長さ(ms)
-     * @attention 音を鳴らしている最中はほかの処理ができないので注意
-     * @note PWM_PINにFREQUENCYの高さの音が出るようDURATION間電圧をPWM信号でかけます
      */
-    void tone(PwmOut &PWM_PIN, float FREQUENCY, int DURATION)
+    void tone(PwmOut &PWM_PIN, double FREQUENCY, uint32_t DURATION)
     {
         if (DURATION == 0)
         {
@@ -29,13 +36,11 @@
     }
 
     /** 
-     * @brief 音を消します
+     * @brief 音を消す
      * @param PWM_PIN ピン(PWMのみ)
      * @param DURATION 無音の長さ(ms)
-     * @attention 音を鳴らしている最中はほかの処理ができないので注意
-     * @note PWM_PINにDURATION間電圧を流しません
      */
-    void notone(PwmOut &PWM_PIN, int DURATION)
+    void notone(PwmOut &PWM_PIN, uint32_t DURATION)
     {
         if (DURATION == 0)
         {
@@ -47,17 +52,16 @@
             PWM_PIN.write(0.0);
         }
     }
-
+    
     /** 
-     * @brief sシャトルランの音源を再生します
+     * @brief シャトルランの音源を再生します
      * @param PWM_PIN ピン(PWMのみ)
      * @param LOOP 繰り返しの回数
-     * @attention 音を鳴らしている最中はほかの処理ができないので注意
      * @note シャトルランのようにだんだんと音の長さと間隔が短くなるように音階を鳴らします
      */
-    void playShuttleRun(PwmOut &PWM_PIN, int LOOP)
+    void playShuttleRun(PwmOut &PWM_PIN, uint32_t LOOP)
     {
-        int melody[8] = {
+        uint32_t melody[8] = {
         262, // ド (C4)
         294, // レ (D4)
         330, // ミ (E4)
@@ -68,28 +72,29 @@
         523, // ド (C5)
         };
 
-    int decreaseAmount = 50;     // 各ステージごとに減少する間隔（50ミリ秒）
-    int DURATION = 800;          // 最初の音の長さ）
+    uint32_t decreaseAmount = 50;     // 各ステージごとに減少する間隔（50ミリ秒）
+    
+    uint32_t DURATION = 800;          // 最初の音の長さ）
 
-    int interval = 1000;
+    uint32_t interval = 1000;
 
-        for (int stage = 1; stage <= LOOP; stage++) {
+        for (uint32_t stage = 1; stage <= LOOP; stage++) {
             // メロディを再生
-            for (int i = 0; i < 8; i++) {
+            for (uint8_t i = 0; i < 8; i++) {
             tone(PWM_PIN, melody[i], DURATION); // 各音を鳴らす
-            notone(PWM_PIN, DURATION/2);
+            notone(PWM_PIN, DURATION / 2);
             }
 
             tone(PWM_PIN, melody[0], DURATION);
-            notone(PWM_PIN, DURATION/2);
+            notone(PWM_PIN, DURATION / 2);
 
-            for (int i = 7; i >= 0; i--) {
+            for (uint_8t i = 7; i >= 0; i--) {
             tone(PWM_PIN, melody[i], DURATION); // 各音を鳴らす
-            notone(PWM_PIN, DURATION/2);
+            notone(PWM_PIN, DURATION / 2);
             }
 
             tone(PWM_PIN, melody[0], DURATION);
-            notone(PWM_PIN, DURATION/2);
+            notone(PWM_PIN, DURATION / 2);
             
             // 次のステージのために音の間隔を短くする
             DURATION -= decreaseAmount;
@@ -97,4 +102,4 @@
         }
     }
 
-#endif
+#endif // TONE_H
