@@ -10,7 +10,6 @@
 #ifndef TONE_H
 #define TONE_H
 
-
 #include <mbed.h>
 
     /** 
@@ -61,7 +60,7 @@
      */
     void playShuttleRun(PwmOut &PWM_PIN, uint32_t LOOP)
     {
-        uint32_t melody[8] = {
+        const uint32_t melody[8] = {
         262, // ド (C4)
         294, // レ (D4)
         330, // ミ (E4)
@@ -72,15 +71,15 @@
         523, // ド (C5)
         };
 
-    uint32_t decreaseAmount = 50;     // 各ステージごとに減少する間隔（50ミリ秒）
+    const uint32_t decreaseAmount = 50;     // 各ステージごとに減少する間隔（50ミリ秒）
     
     uint32_t DURATION = 800;          // 最初の音の長さ）
 
     uint32_t interval = 1000;
 
-        for (uint32_t stage = 1; stage <= LOOP; stage++) {
+        for (int stage = 1; stage <= LOOP; stage++) {
             // メロディを再生
-            for (uint8_t i = 0; i < 8; i++) {
+            for (int i = 0; i < 8; i++) {
             tone(PWM_PIN, melody[i], DURATION); // 各音を鳴らす
             notone(PWM_PIN, DURATION / 2);
             }
@@ -88,7 +87,7 @@
             tone(PWM_PIN, melody[0], DURATION);
             notone(PWM_PIN, DURATION / 2);
 
-            for (uint_8t i = 7; i >= 0; i--) {
+            for (int i = 7; i >= 0; i--) {
             tone(PWM_PIN, melody[i], DURATION); // 各音を鳴らす
             notone(PWM_PIN, DURATION / 2);
             }
